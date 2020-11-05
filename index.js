@@ -17,7 +17,7 @@ const userroute = require("./route/user");
 app.use(userroute);
 
 const offeroute = require("./route/offer");
-app.use(offeroute); //
+app.use(offeroute);
 
 app.listen(process.env.PORT, () => {
   console.log("server has started");
