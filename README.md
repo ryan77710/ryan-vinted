@@ -1,1 +1,1 @@
-# my-repository
+# project vinted back end
