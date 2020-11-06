@@ -89,7 +89,7 @@ router.post("/offer/update", isAuthentificated, async (req, res) => {
     offer.product_details[4].EMPLACEMENT = city;
 
     const result = await cloudinary.uploader.upload(picture, {
-      folder: `vinted/offers/${offer._id}`,
+      folder: `vinted/offer/${offer._id}`,
     });
     offer.product_image = result.secure_url;
     await offer.save();
@@ -103,7 +103,14 @@ router.post("/offer/delete", isAuthentificated, async (req, res) => {
   console.log("route: /offer/delete");
   try {
     const find = await Offer.findById(req.fields.id);
-    find.deleteOne();
+
+    await cloudinary.api.delete_resources_by_prefix(
+      `/vinted/offer/${find._id}`
+    );
+    console.log("cloud 1");
+    await cloudinary.api.delete_folder(`/vinted/offer/${find._id}`);
+    console.log("cloud 2");
+    await find.deleteOne();
     res.status(200).json({ message: "offer deleted" });
   } catch (error) {
     res.status(400).json(error.message);

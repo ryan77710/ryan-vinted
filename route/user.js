@@ -22,7 +22,9 @@ router.post("/user/signup", async (req, res) => {
           },
         });
         const picProfile = req.files.pictureup.path;
-        const result = await cloudinary.uploader.upload(picProfile);
+        const result = await cloudinary.uploader.upload(picProfile, {
+          folder: `vinted/user/picture/${newAccount._id}`,
+        });
         newAccount.picture = result;
 
         const token = uid2(64);
