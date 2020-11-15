@@ -53,7 +53,7 @@ router.post("/offer/publish", isAuthentificated, async (req, res) => {
       owner: req.user,
     });
     const result = await cloudinary.uploader.upload(picture, {
-      folder: `/vinted/offer/${newOffer._id}`,
+      folder: `vinted/offer/${newOffer._id}`,
     });
     newOffer.product_image = result;
     await newOffer.save();
@@ -104,11 +104,13 @@ router.post("/offer/delete", isAuthentificated, async (req, res) => {
   try {
     const find = await Offer.findById(req.fields.id);
 
-    await cloudinary.api.delete_resources_by_prefix(
-      `/vinted/offer/${find._id}`
-    );
+    const deletepic = await cloudinary.api.delete_resources_by_prefix(
+      `vinted/offer/${find._id}`
+    ); //cette requette passe mais ne fonctionne pas sur cloudinary
     console.log("cloud 1");
-    await cloudinary.api.delete_folder(`/vinted/offer/${find._id}`);
+    const deletefold = await cloudinary.api.delete_folder(
+      `vinted/offer/${find._id}`
+    ); //cette requete bloque mon code sans erreur
     console.log("cloud 2");
     await find.deleteOne();
     res.status(200).json({ message: "offer deleted" });
