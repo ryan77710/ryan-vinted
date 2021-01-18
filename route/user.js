@@ -42,7 +42,7 @@ router.post("/user/signup", async (req, res) => {
       res.status(400).json({ message: "you forget the username" });
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(400).json(error.message);
   }
 });
 
@@ -53,9 +53,7 @@ router.post("/user/login", async (req, res) => {
     const password = req.fields.password;
     const userSalt = find.salt;
     const hashToCompare = SHA256(password + userSalt).toString(encBase64);
-    //console.log(hashToCompare);
-    //console.log("--------------------------------------------------------");
-    //console.log();
+
     if (find.hash === hashToCompare) {
       const back = {
         id: find.id,
@@ -70,7 +68,7 @@ router.post("/user/login", async (req, res) => {
       res.status(400).json({ message: "bad password" });
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(400).json(error.message);
   }
 });
 
