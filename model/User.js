@@ -16,7 +16,7 @@ const User = mongoose.model("User", {
   token: String,
   hash: String,
   salt: String,
-  picture: { type: mongoose.Schema.Types.Mixed, default: {} },
+  // picture: { type: mongoose.Schema.Types.Mixed, default: {} },
 });
 
 module.exports = User;
