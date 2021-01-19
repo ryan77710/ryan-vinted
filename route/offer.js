@@ -60,7 +60,7 @@ router.post("/offer/publish", isAuthentificated, async (req, res) => {
 
     res.status(200).json(newOffer);
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 router.post("/offer/update", isAuthentificated, async (req, res) => {
@@ -95,7 +95,7 @@ router.post("/offer/update", isAuthentificated, async (req, res) => {
     await offer.save();
     res.status(200).json({ message: "offer updated :)" });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -115,7 +115,7 @@ router.post("/offer/delete", isAuthentificated, async (req, res) => {
     await find.deleteOne();
     res.status(200).json({ message: "offer deleted" });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -178,7 +178,7 @@ router.get("/offers", isAuthentificated, async (req, res) => {
       offers: offers,
     });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 router.get("/offer/:id", isAuthentificated, async (req, res) => {
@@ -188,7 +188,7 @@ router.get("/offer/:id", isAuthentificated, async (req, res) => {
     const offer = await Offer.findById(id);
     res.status(200).json(offer);
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 

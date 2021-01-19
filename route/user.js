@@ -42,7 +42,7 @@ router.post("/user/signup", async (req, res) => {
       res.status(400).json({ message: "you forget the username" });
     }
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -68,7 +68,7 @@ router.post("/user/login", async (req, res) => {
       res.status(400).json({ message: "bad password" });
     }
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 
