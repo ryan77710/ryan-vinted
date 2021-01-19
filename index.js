@@ -19,6 +19,9 @@ app.use(userroute);
 const offeroute = require("./route/offer");
 app.use(offeroute);
 
+app.all("*", (req, res) => {
+  res.status(404).send("Page introuvable");
+});
 app.listen(process.env.PORT, () => {
   console.log("server has started");
 });
