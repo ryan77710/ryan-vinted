@@ -4,7 +4,13 @@ const User = require("../model/User");
 const uid2 = require("uid2");
 const SHA256 = require("crypto-js/sha256");
 const encBase64 = require("crypto-js/enc-base64");
+
 const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 router.post("/user/signup", async (req, res) => {
   console.log("route: user/signup");
@@ -14,7 +20,7 @@ router.post("/user/signup", async (req, res) => {
       if (find) {
         res.status(400).json({ message: "email already use" });
       } else {
-        const newAccount = await new User({
+        const newAccount = new User({
           email: req.fields.email,
           account: {
             username: req.fields.username,

@@ -120,7 +120,8 @@ router.post("/offer/delete", isAuthentificated, async (req, res) => {
 });
 
 // ici
-router.get("/offers", isAuthentificated, async (req, res) => {
+// router.get("/offers", isAuthentificated, async (req, res) => {
+router.get("/offers", async (req, res) => {
   console.log("route: /offers");
   try {
     let filters = {};
@@ -181,11 +182,19 @@ router.get("/offers", isAuthentificated, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-router.get("/offer/:id", isAuthentificated, async (req, res) => {
+router.get("/offer/:id", async (req, res) => {
   console.log("route: /offer/:id ");
   try {
     const id = req.params.id;
-    const offer = await Offer.findById(id);
+    const offer = await Offer.findById(id)
+      .populate({
+        path: "owner",
+        select: "account avatar",
+      })
+      .populate({
+        path: "account",
+        select: " avatar",
+      });
     res.status(200).json(offer);
   } catch (error) {
     res.status(400).json({ message: error.message });
