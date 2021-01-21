@@ -7,11 +7,6 @@ const { route } = require("./user");
 const { json } = require("express");
 
 const cloudinary = require("cloudinary").v2;
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 router.post("/offer/publish", isAuthentificated, async (req, res) => {
   console.log("route :/offer/publish");

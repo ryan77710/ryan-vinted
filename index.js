@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const formidable = require("express-formidable");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 
 app = express();
@@ -13,6 +14,11 @@ mongoose.connect(process.env.MONGODB_URI, {
   useCreateIndex: true,
 });
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 const userroute = require("./route/user");
 app.use(userroute);
 
