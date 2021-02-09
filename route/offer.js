@@ -21,7 +21,10 @@ router.post("/offer/publish", isAuthentificated, async (req, res) => {
       color,
       city,
     } = req.fields;
+    // console.log(req.files);
     const picture = req.files.picture.path;
+
+    // console.log(req.files);
 
     const newOffer = new Offer({
       product_name: title,
@@ -51,7 +54,38 @@ router.post("/offer/publish", isAuthentificated, async (req, res) => {
       folder: `vinted/offer/${newOffer._id}`,
     });
     newOffer.product_image = result;
+    if (req.files.pictureUp1) {
+      const pictureUp1 = req.files.pictureUp1.path;
+      const result1 = await cloudinary.uploader.upload(pictureUp1, {
+        folder: `vinted/offer/${newOffer._id}`,
+      });
+      newOffer.product_picture.push(result1);
+    }
+    if (req.files.pictureUp2) {
+      const pictureUp2 = req.files.pictureUp2.path;
+      const result2 = await cloudinary.uploader.upload(pictureUp2, {
+        folder: `vinted/offer/${newOffer._id}`,
+      });
+      newOffer.product_picture.push(result2);
+    }
+    if (req.files.pictureUp3) {
+      const pictureUp3 = req.files.pictureUp3.path;
+      const result3 = await cloudinary.uploader.upload(pictureUp3, {
+        folder: `vinted/offer/${newOffer._id}`,
+      });
+      newOffer.product_picture.push(result3);
+    }
+    if (req.files.pictureUp4) {
+      const pictureUp4 = req.files.pictureUp4.path;
+      const result4 = await cloudinary.uploader.upload(pictureUp4, {
+        folder: `vinted/offer/${newOffer._id}`,
+      });
+      newOffer.product_picture.push(result4);
+    }
+    // console.log(newOffer.product_picture);
+
     await newOffer.save();
+    console.log("all its ok");
 
     res.status(200).json(newOffer);
   } catch (error) {

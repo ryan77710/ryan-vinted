@@ -22,12 +22,14 @@ router.post("/user/signup", async (req, res) => {
             phone: req.fields.phone,
           },
         });
-        const picProfile = req.files.pictureup.path;
-        const result = await cloudinary.uploader.upload(picProfile, {
-          folder: `vinted/user/picture/${newAccount._id}`,
-        });
-        newAccount.account.avatar = result;
-        console.log(result);
+        if (req.files.pictureup) {
+          const picProfile = req.files.pictureup.path;
+          const result = await cloudinary.uploader.upload(picProfile, {
+            folder: `vinted/user/picture/${newAccount._id}`,
+          });
+          newAccount.account.avatar = result;
+          console.log(picProfile);
+        }
 
         const token = uid2(64);
         const salt = uid2(64);
