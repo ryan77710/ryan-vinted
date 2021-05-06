@@ -4,6 +4,8 @@ const User = require("../model/User");
 const uid2 = require("uid2");
 const SHA256 = require("crypto-js/sha256");
 const encBase64 = require("crypto-js/enc-base64");
+const isAuthentificated = require("../midleware/isAuthentificated");
+const Offer = require("../model/Offer");
 
 const cloudinary = require("cloudinary").v2;
 
@@ -28,7 +30,6 @@ router.post("/user/signup", async (req, res) => {
             folder: `vinted/user/picture/${newAccount._id}`,
           });
           newAccount.account.avatar = result;
-          console.log(picProfile);
         }
 
         const token = uid2(64);
@@ -71,6 +72,43 @@ router.post("/user/login", async (req, res) => {
     } else {
       res.status(400).json({ message: "bad password" });
     }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.post("/user/profile", isAuthentificated, async (req, res) => {
+  console.log("route: /user/profile");
+  try {
+    const myOffers = await Offer.find({ owner: req.user._id });
+    const user = await User.findById(req.user._id);
+    res.status(200).json({ user: user, myoffers: myOffers });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+router.post("/user/update", isAuthentificated, async (req, res) => {
+  console.log("route: /user/update");
+  try {
+    const description = req.fields.description;
+    const picture = req.files.picture;
+    const user = await User.findById(req.user._id);
+    if (picture) {
+      const deletepic = await cloudinary.api.delete_resources_by_prefix(
+        `vinted/user/picture/${user._id}`
+      );
+
+      const pictureUpload = await cloudinary.uploader.upload(picture.path, {
+        folder: `vinted/user/picture/${user._id}`,
+      });
+      user.account.avatar = pictureUpload;
+    }
+    if (description) {
+      user.account.description = description;
+    }
+
+    await user.save();
+    res.status(200).json({ message: "photo d'utilisateur mise a jour" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

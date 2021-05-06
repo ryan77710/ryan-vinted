@@ -10,13 +10,14 @@ const User = mongoose.model("User", {
       required: true,
       type: String,
     },
+    description: { type: String, default: "description" },
     phone: String,
     avatar: Object,
   },
+  favoritesOffer: [Object],
   token: String,
   hash: String,
   salt: String,
-  // picture: { type: mongoose.Schema.Types.Mixed, default: {} },
 });
 
 module.exports = User;

@@ -16,7 +16,6 @@ router.post("/payment", isAuthentificated, async (req, res) => {
       description: req.fields.description,
       source: stripeToken,
     });
-    // console.log(response.status);
     res.status(200).json(response);
   } catch (error) {
     console.log(error);
