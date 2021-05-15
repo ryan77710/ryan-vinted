@@ -66,23 +66,20 @@ router.post("/offer/publish", isAuthentificated, async (req, res) => {
       if (i === 0) {
         const picture = req.files[fileKeys[i]].path;
         const result = await cloudinary.uploader.upload(picture, {
-          folder: `vinted/offer/test/${newOffer._id}`,
+          folder: `vinted/offer/${newOffer._id}`,
         });
         newOffer.product_image = result;
         newOffer.product_picture.push(result);
       } else {
-        console.log("image tab");
         const picture = req.files[fileKeys[i]].path;
         const result = await cloudinary.uploader.upload(picture, {
-          folder: `vinted/offer/test/${newOffer._id}`,
+          folder: `vinted/offer/${newOffer._id}`,
         });
         newOffer.product_picture.push(result);
       }
     }
-    // await newOffer.save();
+    await newOffer.save();
     res.status(200).json(newOffer);
-
-    // res.status(200).json(newOffer);
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: error.message });
@@ -103,22 +100,117 @@ router.post("/offer/update", isAuthentificated, async (req, res) => {
       city,
     } = req.fields;
 
-    offer.product_name = title;
-    offer.product_description = description;
-    offer.product_price = price;
-    const picture = req.files.picture.path;
-    offer.product_details[0].MARQUE = brand;
-    offer.product_details[1].TAILLE = size;
-    offer.product_details[2].ETAT = condition;
-    offer.product_details[3].COULEUR = color;
-    offer.product_details[4].EMPLACEMENT = city;
+    if (String(offer.owner) === String(req.user._id)) {
+      offer.product_name = title;
+      offer.product_description = description;
+      offer.product_price = price;
+      offer.product_details[0].MARQUE = brand;
+      offer.product_details[1].TAILLE = size;
+      offer.product_details[2].ETAT = condition;
+      offer.product_details[3].COULEUR = color;
+      offer.product_details[4].EMPLACEMENT = city;
+      offer.markModified("product_details");
+      await offer.save();
+      res.status(200).json(offer);
+    } else {
+      res.status(400).json({ message: "vous ne posséder pas cette anonnce" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
-    const result = await cloudinary.uploader.upload(picture, {
-      folder: `vinted/offer/${offer._id}`,
-    });
-    offer.product_image = result.secure_url;
-    await offer.save();
-    res.status(200).json({ message: "offer updated :)" });
+router.post("/offer/picture-delete", isAuthentificated, async (req, res) => {
+  console.log("route : /offer/picture-delete");
+  try {
+    const { assetId, publicId, offerId } = req.fields;
+    if (assetId && publicId && offerId) {
+      const user = await User.findById(req.user._id);
+      const offer = await Offer.findById(offerId);
+
+      if (String(user._id) === String(offer.owner)) {
+        await cloudinary.uploader.destroy(publicId);
+
+        const tab = offer.product_picture;
+
+        tab.map((picture, index) => {
+          if (picture.asset_id === assetId) {
+            tab.splice(index, 1);
+          }
+        });
+
+        await offer.save();
+        res.status(200).json({ message: "Image suprimé" });
+      } else {
+        res.status(400).json({ message: "Non Autorisé" });
+      }
+    } else {
+      res.status(400).json({ message: "Fields missing" });
+    }
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+router.post(
+  "/offer/picture-profile-change",
+  isAuthentificated,
+  async (req, res) => {
+    console.log(" road: /offer/picture-add");
+    try {
+      const { offerId } = req.fields;
+      const picture = req.files.picture.path;
+
+      if (offerId && picture) {
+        const user = await User.findById(req.user._id);
+        const offer = await Offer.findById(offerId);
+        if (String(user._id) === String(offer.owner)) {
+          const public_id = offer.product_picture[0].public_id;
+          await cloudinary.uploader.destroy(public_id);
+
+          const result = await cloudinary.uploader.upload(picture, {
+            folder: `vinted/offer/${offer._id}`,
+          });
+          offer.product_picture.shift();
+          offer.product_picture.unshift(result);
+          offer.product_image = result;
+
+          offer.save();
+
+          res.status(200).json(offer);
+        } else {
+          res.status(400).json({ message: "Non Autorisé" });
+        }
+      } else {
+        res.status(400).json({ message: "fields missing" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+);
+
+router.post("/offer/picture-add", isAuthentificated, async (req, res) => {
+  console.log(" road: /offer/picture-add");
+  try {
+    const { offerId } = req.fields;
+    const picture = req.files.picture.path;
+
+    if (offerId) {
+      const user = await User.findById(req.user._id);
+      const offer = await Offer.findById(offerId);
+      if (String(user._id) === String(offer.owner)) {
+        const result = await cloudinary.uploader.upload(picture, {
+          folder: `vinted/offer/${offer._id}`,
+        });
+        offer.product_picture.push(result);
+        offer.save();
+        res.status(200).json(offer);
+      } else {
+        res.status(400).json({ message: "Non Autorisé" });
+      }
+    } else {
+      res.status(400).json({ message: "fields missing" });
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -128,18 +220,16 @@ router.post("/offer/delete", isAuthentificated, async (req, res) => {
   console.log("route: /offer/delete");
   try {
     const offer = await Offer.findById(req.fields.id);
-    console.log(offer);
 
-    // const deletepic = await cloudinary.api.delete_resources_by_prefix(
-    //   `vinted/offer/${offer._id}`
-    // );
-    // const deletefold = await cloudinary.api.delete_folder(
-    //   `vinted/offer/${offer._id}`
-    // );
-    // await offer.deleteOne();
+    const deletepic = await cloudinary.api.delete_resources_by_prefix(
+      `vinted/offer/${offer._id}`
+    );
+    const deletefold = await cloudinary.api.delete_folder(
+      `vinted/offer/${offer._id}`
+    );
+    await offer.deleteOne();
     res.status(200).json({ message: "offer deleted" });
   } catch (error) {
-    console.log("oo");
     res.status(400).json({ message: error.message });
   }
 });

@@ -1,7 +1,7 @@
 const User = require("../model/User");
 
 const isAuthentificated = async (req, res, next) => {
-  console.log("test enter");
+  console.log("test isAuthentificated  enter");
 
   if (req.headers.authorization) {
     const token = req.headers.authorization.replace("Bearer ", "");
@@ -10,10 +10,9 @@ const isAuthentificated = async (req, res, next) => {
     );
     if (user) {
       req.user = user;
-      console.log("test finish :)");
+      console.log("test isAuthentificated finish :)");
       return next();
     } else {
-      console.log("o");
       return res.status(400).json({ message: "unauthorized :(" });
     }
   } else {

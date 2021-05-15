@@ -108,7 +108,7 @@ router.post("/user/update", isAuthentificated, async (req, res) => {
     }
 
     await user.save();
-    res.status(200).json({ message: "photo d'utilisateur mise a jour" });
+    res.status(200).json({ message: "Compte mise a jour" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

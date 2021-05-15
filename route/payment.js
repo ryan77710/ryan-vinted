@@ -9,7 +9,6 @@ router.post("/payment", isAuthentificated, async (req, res) => {
   console.log("route : /payment");
   try {
     const stripeToken = req.fields.stripeToken;
-    console.log(req.fields);
     const response = await stripe.charges.create({
       amount: req.fields.price * 100,
       currency: "eur",
@@ -18,7 +17,21 @@ router.post("/payment", isAuthentificated, async (req, res) => {
     });
     res.status(200).json(response);
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+router.post("/payment/donation", isAuthentificated, async (req, res) => {
+  console.log("route : /payment/donation");
+  try {
+    const stripeToken = req.fields.stripeToken;
+    const response = await stripe.charges.create({
+      amount: req.fields.price * 100,
+      currency: "eur",
+      source: stripeToken,
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 });
 module.exports = router;

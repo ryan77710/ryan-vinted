@@ -28,6 +28,9 @@ app.use(offeRoute);
 const paymentRoute = require("./route/payment");
 app.use(paymentRoute);
 
+app.get("/", (req, res) => {
+  res.status(200).send("Home");
+});
 app.all("*", (req, res) => {
   res.status(404).send("Page introuvable");
 });
