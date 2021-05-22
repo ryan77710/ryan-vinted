@@ -217,16 +217,22 @@ all offer of user
 
 add favorite offer of a user
 
-| Body                  | Type          | Required | Description                                                                      |
-| --------------------- | ------------- | -------- | -------------------------------------------------------------------------------- |
-| `_id`                 | string        | Yes      | offer id                                                                         |
-| `product_details`     | array         | Yes      | has as element a string 0. `brand` 1. `size` 2. `condition` 3. `color` 4. `city` |
-| `product_picture`     | array         | Yes      | array of object picture                                                          |
-| `product_image`       | object        | Yes      | object picture                                                                   |
-| `owner`               | object/string | Yes      | user                                                                             |
-| `product_name`        | string        | Yes      | offer name                                                                       |
-| `product_description` | string        | Yes      | offer description                                                                |
-| `product_price`       | number        | Yes      | offer price                                                                      |
+| Body              | Type   | Required | Description                           |
+| ----------------- | ------ | -------- | ------------------------------------- |
+| `_id`             | string | Yes      | offer id                              |
+| `product_details` | array  | Yes      | has 5 childen element (type string) : |
+
+0. `brand`
+1. `size`
+2. `condition`
+3. `color`
+4. `city` |
+   | `product_picture` | array | Yes | array of object picture |
+   | `product_image` | object | Yes | object picture |
+   | `owner` | object/string | Yes | user |
+   | `product_name` | string | Yes | offer name |
+   | `product_description` | string | Yes | offer description |
+   | `product_price` | number | Yes | offer price |
 
 <br>
 
