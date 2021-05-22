@@ -40,11 +40,10 @@ router.post("/user/signup", async (req, res) => {
         newAccount.hash = hash;
         newAccount.salt = salt;
         await newAccount.save();
-        console.log("account created");
         res.status(200).json(newAccount);
       }
     } else {
-      res.status(400).json({ message: "you forget the username" });
+      res.status(400).json({ message: "missing field" });
     }
   } catch (error) {
     res.status(400).json({ message: error.message });

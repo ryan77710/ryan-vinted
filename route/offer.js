@@ -436,17 +436,20 @@ router.get("/offer-auth/:id", isAuthentificated, async (req, res) => {
         path: "account",
         select: " avatar",
       });
-    const offerFavovite = user.favoritesOffer;
-    for (let i = 0; i < offerFavovite.length; i++) {
-      if (String(offerFavovite[i]._id) === String(offer._id)) {
-        console.log("il est favorie");
-        offer.favorite = true;
-        return res.status(200).json(offer);
+    if (offer) {
+      const offerFavovite = user.favoritesOffer;
+      for (let i = 0; i < offerFavovite.length; i++) {
+        if (String(offerFavovite[i]._id) === String(offer._id)) {
+          offer.favorite = true;
+          return res.status(200).json(offer);
+        }
       }
-    }
 
-    offer.favorite = false;
-    res.status(200).json(offer);
+      offer.favorite = false;
+      res.status(200).json(offer);
+    } else {
+      res.status(400).json({ message: "Cette annonce existe plus" });
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
