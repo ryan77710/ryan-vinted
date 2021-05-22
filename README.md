@@ -6,13 +6,13 @@
 
 Create a new user
 
-| Body        | Type   | Required |
-| ----------- | ------ | -------- |
-| `email`     | string | Yes      |
-| `password`  | string | Yes      |
-| `username`  | string | Yes      |
-| `phone`     | string | Yes      |
-| `pictureup` | object | Yes      |
+| Body        | Type   | Required | Description   |
+| ----------- | ------ | -------- | ------------- |
+| `email`     | string | Yes      | user email    |
+| `password`  | string | Yes      | user password |
+| `username`  | string | Yes      | user username |
+| `phone`     | string | Yes      | user phone    |
+| `pictureup` | object | Yes      | user picture  |
 
 <br>
 <br>
@@ -21,10 +21,10 @@ Create a new user
 
 Log a user
 
-| Body       | Type   | Required |
-| ---------- | ------ | -------- |
-| `email`    | string | Yes      |
-| `password` | string | Yes      |
+| Body       | Type   | Required | Description   |
+| ---------- | ------ | -------- | ------------- |
+| `email`    | string | Yes      | user email    |
+| `password` | string | Yes      | user password |
 
 <br>
 <br>
@@ -46,10 +46,10 @@ Get all annonce and profile data of user
 
 Update profile user
 
-| Body        | Type   | required |
-| ----------- | ------ | -------- |
-| picture     | object | no       |
-| description | string | no       |
+| Body        | Type   | required | Description      |
+| ----------- | ------ | -------- | ---------------- |
+| picture     | object | no       | user picture     |
+| description | string | no       | user description |
 
 <br>
 
@@ -217,16 +217,16 @@ all offer of user
 
 add favorite offer of a user
 
-| Body                  | Type          | Required |
-| --------------------- | ------------- | -------- |
-| `_id`                 | string        | Yes      |
-| `product_details`     | string        | Yes      |
-| `product_picture`     | array         | Yes      |
-| `product_image`       | object        | Yes      |
-| `owner`               | object/srting | Yes      |
-| `product_name`        | string        | Yes      |
-| `product_description` | string        | Yes      |
-| `product_price`       | number        | Yes      |
+| Body                  | Type          | Required | Description                                                                      |
+| --------------------- | ------------- | -------- | -------------------------------------------------------------------------------- |
+| `_id`                 | string        | Yes      | offer id                                                                         |
+| `product_details`     | array         | Yes      | has as element a string 0. `brand` 1. `size` 2. `condition` 3. `color` 4. `city` |
+| `product_picture`     | array         | Yes      | array of object picture                                                          |
+| `product_image`       | object        | Yes      | object picture                                                                   |
+| `owner`               | object/string | Yes      | user                                                                             |
+| `product_name`        | string        | Yes      | offer name                                                                       |
+| `product_description` | string        | Yes      | offer description                                                                |
+| `product_price`       | number        | Yes      | offer price                                                                      |
 
 <br>
 
@@ -254,10 +254,10 @@ delete a favorite offer of a user
 
 change the picture profile of a offer
 
-| FormData  | Type   | Required |
-| --------- | ------ | -------- |
-| `offerId` | string | Yes      |
-| `picture` | object | Yes      |
+| FormData  | Type   | Required | Desciption        |
+| --------- | ------ | -------- | ----------------- |
+| `offerId` | string | Yes      | offer id          |
+| `picture` | object | Yes      | picture to change |
 
 <br>
 
@@ -272,10 +272,10 @@ change the picture profile of a offer
 
 add picture to a offer
 
-| FormData  | Type   | Required |
-| --------- | ------ | -------- |
-| `offerId` | string | Yes      |
-| `picture` | object | Yes      |
+| FormData  | Type   | Required | Desciption     |
+| --------- | ------ | -------- | -------------- |
+| `offerId` | string | Yes      | offer id       |
+| `picture` | object | Yes      | picture to add |
 
 <br>
 
@@ -290,11 +290,11 @@ add picture to a offer
 
 delete picture to a offer
 
-| FormData   | Type   | Required |
-| ---------- | ------ | -------- |
-| `assetId`  | string | Yes      |
-| `publicId` | string | Yes      |
-| `offerId`  | string | Yes      |
+| FormData   | Type   | Required | Description                 |
+| ---------- | ------ | -------- | --------------------------- |
+| `assetId`  | string | Yes      | picture asset to delete     |
+| `publicId` | string | Yes      | picture public id to delete |
+| `offerId`  | string | Yes      | offer id                    |
 
 <br>
 
@@ -311,11 +311,11 @@ delete picture to a offer
 
 buy a offer
 
-| Body          | Type   | Required |
-| ------------- | ------ | -------- |
-| `stripeToken` | String | Yes      |
-| `price`       | number | Yes      |
-| `description` | string | Yes      |
+| Body          | Type   | Required | Description       |
+| ------------- | ------ | -------- | ----------------- |
+| `stripeToken` | String | Yes      | stripe token      |
+| `price`       | number | Yes      | offer price       |
+| `description` | string | Yes      | offer description |
 
 <br>
 
@@ -326,13 +326,13 @@ buy a offer
 <br>
 <br>
 
-## /payment/donation (POST)
+### /payment/donation (POST)
 
 donation to the web site
 
-| Body    | Type   | Required |
-| ------- | ------ | -------- |
-| `price` | number | Yes      |
+| Body    | Type   | Required | Description    |
+| ------- | ------ | -------- | -------------- |
+| `price` | number | Yes      | donation price |
 
 <br>
 
